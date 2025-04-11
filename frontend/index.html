@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeetFlow AI - AI Captions for Foot Models</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #333;
+    }
+    header {
+      background: #ffd6e0;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .cta {
+      margin-top: 1rem;
+    }
+    .cta a {
+      background: #ff4d6d;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .section {
+      padding: 4rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .features, .steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .feature, .step {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    .pricing {
+      background: #fff0f3;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .plan {
+      margin: 1rem auto;
+      padding: 2rem;
+      border: 2px solid #ff4d6d;
+      border-radius: 8px;
+      max-width: 400px;
+    }
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 2rem;
+    }
+    .button-footer {
+      background: #ff4d6d;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #signup, #subscribe {
+      background: #f3f3f3;
+      padding: 3rem;
+      text-align: center;
+    }
+    input[type="email"], input[type="password"] {
+      padding: 0.75rem;
+      margin: 0.5rem;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button.signup-btn, button.subscribe-btn {
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Level Up Your Feet Pic Game with AI 👣</h1>
+    <p>Smart captions. Viral hashtags. Best post times. All in one place.</p>
+    <div class="cta">
+      <a href="#signup">🚀 Start for Free</a>
+    </div>
+  </header>
+
+  <section class="section steps">
+    <div class="step">
+      <h3>1. Upload or Describe Your Photo</h3>
+      <p>Pick your vibe — soles, heels, socks, shower, etc.</p>
+    </div>
+    <div class="step">
+      <h3>2. Pick a Tone</h3>
+      <p>Flirty? Funny? Teasing? Let the AI work its magic.</p>
+    </div>
+    <div class="step">
+      <h3>3. Get Your Captions & Hashtags</h3>
+      <p>Copy. Paste. Post. Boom. You’re viral 💥</p>
+    </div>
+  </section>
+
+  <section class="section features">
+    <div class="feature">
+      <h4>🧠 AI-Powered Captions</h4>
+      <p>Generate scroll-stopping text in seconds.</p>
+    </div>
+    <div class="feature">
+      <h4>🔖 Hashtag Generator</h4>
+      <p>Get niche-specific, platform-ready tags.</p>
+    </div>
+    <div class="feature">
+      <h4>📸 Photo Analyzer</h4>
+      <p>Upload a pic, and let the AI match the vibe.</p>
+    </div>
+    <div class="feature">
+      <h4>⏰ Best Time to Post</h4>
+      <p>Know when your fans are actually online.</p>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <h2>Pricing</h2>
+    <div class="plan">
+      <h3>Free Plan 💅</h3>
+      <ul>
+        <li>3 AI captions per day</li>
+        <li>3 hashtag sets/week</li>
+        <li>No payment required</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Pro Plan – $9.99/month 🔥</h3>
+      <ul>
+        <li>Unlimited captions & hashtags</li>
+        <li>Photo analyzer + best post times</li>
+        <li>Save & reuse presets</li>
+      </ul>
+    </div>
+    <a class="button-footer" href="#signup">✨ Start for Free</a>
+  </section>
+
+  <section id="signup">
+    <h2>Sign Up for FeetFlow AI</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <br />
+    <button class="signup-btn" onclick="signUp()">Create Account</button>
+    <p id="signup-message"></p>
+  </section>
+
+  <section id="subscribe">
+    <h2>Upgrade to Pro Plan</h2>
+    <p>Enjoy unlimited AI captions, hashtag sets, photo analyzer, and more for only $9.99/month.</p>
+    <button class="subscribe-btn" onclick="subscribeToPro()">Subscribe Now</button>
+    <p id="stripe-message"></p>
+  </section>
+
+  <footer>
+    <h3>Stop guessing. Start growing.</h3>
+    <p>Get your first viral caption in seconds — it’s free to try!</p>
+    <a class="button-footer" href="#signup">Start for Free</a>
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function signUp() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("signup-message");
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          message.style.color = "green";
+          message.textContent = "🎉 Account created successfully!";
+        })
+        .catch((error) => {
+          message.style.color = "red";
+          message.textContent = error.message;
+        });
+    }
+
+    async function subscribeToPro() {
+      const stripe = Stripe("YOUR_STRIPE_PUBLISHABLE_KEY");
+      const response = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ plan: "pro" })
+      });
+
+      const session = await response.json();
+
+      if (session.id) {
+        stripe.redirectToCheckout({ sessionId: session.id });
+      } else {
+        document.getElementById("stripe-message").style.color = "red";
+        document.getElementById("stripe-message").textContent = "⚠️ Error creating checkout session.";
+      }
+    }
+  </script>
+</body>
+</html>
